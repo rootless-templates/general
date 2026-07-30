@@ -3,6 +3,11 @@ _subdirectory: template
 project_name:
     type: str
     help: Project name?
+    validator: >-
+      {% if not (project_name | regex_search('^[a-z0-9_]+(-[a-z0-9]+)*$')) %}
+      Project name must contain only lowercase letters, numbers, and hyphens
+      (e.g. "my-project"), with no spaces or other special characters.
+      {% endif %}
 
 _tasks:
     # Initialize git repository and make initial commit
