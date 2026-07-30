@@ -8,8 +8,13 @@
   // Log as rootless user
   "remoteUser": "worker",
   "containerUser": "worker",
-  // Define container name and host name
+  // Ensure git-untracked secrets files exist before the container is created,
+  // since --env-file below is resolved at container creation time
+  "initializeCommand": "bash .devcontainer/bootstrap-env.sh",
+  // Define container name and host name, and load runtime secrets
   "runArgs": [
+    "--env-file",
+    "${localWorkspaceFolder}/.devcontainer/env.local",
     "--name",
     "devcontainer-${localWorkspaceFolderBasename}",
     "--hostname",

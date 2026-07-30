@@ -1,2 +1,6 @@
+# Filled tokens and secrets
+/.env.local
+.devcontainer/env.local
+
 # Local, per-user setup script
 .devcontainer/setup.sh
