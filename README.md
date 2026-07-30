@@ -61,6 +61,7 @@ New releases are drafted using `git-cliff` via `just release::` recipes.
 ├── cliff.toml            # git-cliff config for CHANGELOG generation
 ├── justfile              # List of recipes
 ├── README.md             # This file
+├── AGENTS.md             # Instructions for coding agents
 ├── LICENSE               # License
 ├── .recipes/             # Just recipe modules used to develop this template itself
 │   ├── devcontainers.just
