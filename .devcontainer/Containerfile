@@ -27,4 +27,6 @@ RUN pipx install --global pre-commit
 
 # Create user
 RUN groupadd --gid 1000 worker \
-    && useradd --create-home --uid 1000 --gid 1000 worker
+    && useradd --create-home --uid 1000 --gid 1000 --shell /bin/bash worker
+
+USER worker
