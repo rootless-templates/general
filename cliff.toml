@@ -23,8 +23,14 @@ body = """
 {% for group, commits in commits | group_by(attribute="group") %}
     ### {{ group | upper_first }}
     {%- for commit in commits %}
-        - {{ commit.message | split(pat="\n") | first | upper_first | trim }}\
-    {% endfor %}
+        {%- set msg_parts = commit.message | split(pat=": ") -%}
+        {%- set description = msg_parts | last | trim -%}
+        {%- if commit.scope %}
+            - ({{ commit.scope }}) {{ description | upper_first }}
+        {%- else %}
+            - {{ description | upper_first }}
+        {%- endif %}
+    {%- endfor %}
 {% endfor %}\n\n
 """
 # Remove leading and trailing whitespaces from the changelog's body.
@@ -40,6 +46,8 @@ filter_unconventional = false
 # Assigns commits to groups.
 # Optionally sets the commit's scope and can decide to exclude commits from further processing.
 commit_parsers = [
+  { message = "^refacto", group = "Changed" },
+  { message = "^feat", group = "Added" },
   { message = "^[a|A]dd", group = "Added" },
   { message = "^[s|S]upport", group = "Added" },
   { message = "^[r|R]emove", group = "Removed" },
