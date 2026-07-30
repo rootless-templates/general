@@ -1,0 +1,30 @@
+FROM debian:trixie-slim
+
+# Install development tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    gcc \
+    git \
+    locales \
+    pipx \
+    ssh \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+# Set locales
+RUN sed -i 's/^# \(C.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && update-locale LANG=C.UTF-8
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+# Use --global to make package available to all users
+RUN pipx install --global rust-just
+RUN pipx install --global copier && pipx inject --global copier copier-template-extensions
+RUN pipx install --global git-cliff
+RUN pipx install --global pre-commit
+
+# Create user
+RUN groupadd --gid 1000 worker \
+    && useradd --create-home --uid 1000 --gid 1000 worker

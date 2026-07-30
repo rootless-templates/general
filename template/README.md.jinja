@@ -1,0 +1,64 @@
+# {{ project_name | title }}
+
+## Development
+Development is conducted inside development containers. VS Code handles most
+container management (build, start, stop) automatically when you open the
+project ; outside of VS Code, you can use `just` recipes (see
+[devcontainers.just](./.recipes/devcontainers.just))
+
+Build time secrets are stored in `.devcontainer/env.local` ; run time secrets
+are stored in the `.env.local` file. Both files are not committed to the
+repository, instead `.devcontainer/env` and `.env` files act as templates.
+
+To set up your development environment from the CLI, use `just
+devcontainer::up`.
+
+### Project lifecycle
+This project uses [`just`](https://just.systems/) as a command runner. Run `just`
+(or `just --list`) to see all available recipes. Key commands:
+
+| Command                       | Description                                                                       |
+| ----------------------------- | --------------------------------------------------------------------------------- |
+| `just setup`                  | Install dependencies, configure pre-commit hooks, and set up the dev environment  |
+| `just devcontainers::up`      | Build and start the dev container, then open a shell inside it                    |
+| `just devcontainers::stop`    | Stop the running dev container                                                    |
+| `just devcontainers::down`    | Remove the dev container                                                          |
+| `just template::update`       | Update the project from the latest copier template                                |
+| `just template::check-update` | Check whether a template update is available                                      |
+| `just release::check`         | Print unreleased commits and the proposed next version                            |
+| `just release::release`       | Interactively draft a release: bump version, update changelog, commit and tag     |
+| `just release::push`          | Push commits and tags to the remote                                               |
+
+### Installing dependencies
+Install libraries from pypi using: `pdm add <LIB>`. The library will appear in
+[`pyproject.toml`](./pyproject.toml). You may specify a `--group` or a optional
+dependencies or dependency groups, see [pdm
+documentation](https://pdm-project.org/en/latest/usage/dependency/) for more
+information.
+
+### Versioning and changelog
+This project follows [Semantic Versioning](https://semver.org/) and uses
+[Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`,
+`chore:`, etc.). Human readable release notes are maintained in
+[`CHANGELOG.md`](./CHANGELOG.md).
+
+New releases are drafted using `git-cliff` via `just release::` recipes.
+
+### Project architecture
+The project is organized as follows:
+
+```
+.recipes/               # Recipes modules for just, see also `justfile`
+.devcontainer/          # Dev container configuration and setup
+├── devcontainer.json   # Root configuration
+├── Containerfile       # Container definition
+├── setup.sh            # Optional, per user, git-untracked configuration
+src/
+├── {{ package_name}}/  # {{ project_name | title }} package
+│   ├── __init__.py     # Package initialization
+README.md               # Documentation root
+CHANGELOG.md            # Human readable list of changes
+justfile                # List of recipes
+.env                    # Template configuration
+.env.local              # Per-user, git-untracked secrets and environment
+```

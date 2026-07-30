@@ -1,0 +1,11 @@
+_subdirectory: template
+
+project_name:
+    type: str
+    help: Project name?
+
+_tasks:
+    # Initialize git repository and make initial commit
+    - ["git", "init"]
+    - ["git", "add", "."]
+    - ["git", "commit", "-m", "chore(repo): Setup project structure"]

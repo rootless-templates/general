@@ -1,0 +1,30 @@
+// -*- jsonc -*-
+// For format details, see https://containers.dev/implementors/json_reference/.
+{
+  "name": "devcontainer-template-general",
+  "build": {
+    "dockerfile": "Containerfile"
+  },
+  // Log as rootless user
+  "remoteUser": "worker",
+  "containerUser": "worker",
+  // Define container name and host name
+  "runArgs": [
+    "--name",
+    "devcontainer-${localWorkspaceFolderBasename}",
+    "--hostname",
+    "template-general"
+  ],
+  // Setup the repository on first connection
+  "postCreateCommand": "just setup",
+  // Set security for SE Linux
+  "securityOpt": [ "label=disable" ],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": []
+    }
+  }
+}
