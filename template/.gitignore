@@ -1,5 +1,5 @@
 # Filled tokens and secrets
-/.env.local
+.env.local
 .devcontainer/env.local
 
 # Local, per-user setup script
