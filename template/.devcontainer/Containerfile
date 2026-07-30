@@ -30,3 +30,10 @@ RUN groupadd --gid 1000 worker \
     && useradd --create-home --uid 1000 --gid 1000 --shell /bin/bash worker
 
 USER worker
+
+# Make the user-installed commands available in all processes (CMD uses exec
+# form, so ~/.bashrc is never sourced). /home/user is written literally: ENV only
+# substitutes ARG/ENV variables declared in this file, so "${HOME}/.local/bin" would
+# silently expand to "/.local/bin".
+RUN mkdir --parents /home/worker/.local/bin
+ENV PATH="/home/worker/.local/bin:${PATH}"
